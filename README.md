@@ -199,3 +199,137 @@ plot.roc(valdata_2$HBSA, svm_prediction_val_2 [,2], col="#4daf4a", lwd=4, print.
 
 legend("bottomright", legend=c("UITH validation cohort", "SNP validation cohort"), col=c("#377eb8", "#4daf4a"), lwd=4)
 ```
+
+```{r}
+par(pty = "m")
+```
+
+BUSAYO AJUWON : 25 OCTOBER 2022
+
+Reconfirming performance metrics and evaluating Confidence Interval using Delong's (U valdidation data)
+
+```{r}
+svm_prediction_val <- predict(model_svmRadial, valdata, type ="prob")
+head (svm_prediction_val)
+```
+
+```{r}
+valdata$SVMprob <- svm_prediction_val[,"positive"]
+valdata$SVMclass <- predict(model_svmRadial, valdata)
+```
+
+```{r}
+# Positive will be used as the event of interest
+sensitivity(data = valdata$SVMclass,
+ reference = valdata$HBSA,
+ positive = "positive")
+```
+
+```{r}
+specificity(data = valdata$SVMclass,
+ reference = valdata$HBSA,
+ negative = "negative")
+```
+
+```{r}
+posPredValue(data = valdata$SVMclass,
+ reference = valdata$HBSA,
+ positive = "positive")
+```
+
+```{r}
+negPredValue(data = valdata$SVMclass,
+ reference = valdata$HBSA,
+ negative = "negative")
+```
+
+```{r}
+#Combined confusion matrix
+confusionMatrix(data = valdata$SVMclass,
+ reference = valdata$HBSA,
+ positive = "positive")
+```
+
+Roc Curve 
+
+```{r}
+library(pROC)
+  rocCurve <- roc(response = valdata$HBSA,
+  predictor = valdata$SVMprob)
+```
+auc
+
+```{r}
+ auc(rocCurve)
+```
+
+DeLong Confidence Interval
+
+```{r}
+ci.auc(rocCurve)
+```
+
+Confirming performance metrics and evaluating Confidence Interval using Delong's (A valdidation data)
+
+```{r}
+svm_prediction_val_2 <- predict(model_svmRadial_2, valdata_2, type ="prob")
+head (svm_prediction_val_2)
+
+```
+
+```{r}
+valdata_2$SVMprob <- svm_prediction_val_2[,"positive"]
+valdata_2$SVMclass <- predict(model_svmRadial_2, valdata_2)
+```
+
+```{r}
+# Positive will be used as the event of interest
+sensitivity(data = valdata_2$SVMclass,
+ reference = valdata_2$HBSA,
+ positive = "positive")
+```
+
+```{r}
+specificity(data = valdata_2$SVMclass,
+ reference = valdata_2$HBSA,
+ negative = "negative")
+```
+
+```{r}
+posPredValue(data = valdata_2$SVMclass,
+ reference = valdata_2$HBSA,
+ positive = "positive")
+```
+
+```{r}
+negPredValue(data = valdata_2$SVMclass,
+ reference = valdata_2$HBSA,
+ negative = "negative")
+```
+
+```{r}
+#Combined confusion matrix
+confusionMatrix(data = valdata_2$SVMclass,
+ reference = valdata_2$HBSA,
+ positive = "positive")
+```
+
+Roc Curve 
+
+```{r}
+library(pROC)
+  rocCurve_A <- roc(response = valdata_2$HBSA,
+  predictor = valdata_2$SVMprob)
+```
+
+auc
+
+```{r}
+ auc(rocCurve_A)
+```
+
+DeLong Confidence Interval
+
+```{r}
+ci.auc(rocCurve_A)
+```
